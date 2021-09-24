@@ -25,6 +25,7 @@ const Wizard = ({ stepMap, initialStepName }) => {
     setCurrentStepName(nextStepName)
   }
 
+  // TODO: add step tracker / progress bar
   return (
     <Fragment>
       <Component form={formEl} {...(componentProps || {})} />
