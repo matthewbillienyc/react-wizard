@@ -4,7 +4,7 @@ import { Button } from 'antd'
 const Wizard = ({ stepMap, initialStepName }) => {
   const [currentStepName, setCurrentStepName] = useState(initialStepName)
   const formEl = useRef()
-  const { nextStep, previousStep, Component, componentProps, onSubmit: stepSubmit } = stepMap[currentStepName]
+  const { nextStep, previousStep, Component, componentProps, onSubmit } = stepMap[currentStepName]
   
   const [wizardState, setWizardState] = useState(Object.keys(stepMap).reduce((acc, currentKey) => {
     return acc[currentKey] = {}
@@ -17,7 +17,11 @@ const Wizard = ({ stepMap, initialStepName }) => {
       ? nextStep()
       : nextStep
 
-    if (stepSubmit) stepSubmit({ form: formEl, setWizardState, stepName: currentStepName })
+    if (onSubmit) {
+      // TODO: validate form / errors / disabled next
+      // Call step submit
+      onSubmit({ form: formEl, setWizardState, stepName: currentStepName })
+    }
     setCurrentStepName(nextStepName)
   }
 
