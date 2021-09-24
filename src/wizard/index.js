@@ -12,7 +12,7 @@ const Wizard = ({ stepMap, initialStepName }) => {
 
   console.log(wizardState)
 
-  const onSubmit = () => {
+  const handleNextStep = () => {
     const nextStepName = typeof nextStep === 'function'
       ? nextStep()
       : nextStep
@@ -23,9 +23,9 @@ const Wizard = ({ stepMap, initialStepName }) => {
 
   return (
     <Fragment>
-      <Component form={formEl} onSubmit={onSubmit} {...(componentProps || {})} />
+      <Component form={formEl} {...(componentProps || {})} />
       <Button onClick={() => setCurrentStepName(previousStep)}>Previous</Button>
-      <Button onClick={onSubmit}>Submit</Button>
+      <Button onClick={handleNextStep}>Next</Button>
     </Fragment>
   )
 }
