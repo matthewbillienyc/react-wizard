@@ -35,7 +35,7 @@ const stepMap = {
                 message: 'Please enter a valid email.',
               }]}
             >
-              <Input/>
+              <Input type='email' placeholder='email'/>
             </Form.Item>
             <Form.Item
               name='password'
@@ -45,7 +45,7 @@ const stepMap = {
                 message: 'Must enter a password',
               }]}
             >
-              <Input type='password'/>
+              <Input type='password' placeholder='password'/>
             </Form.Item>
           </Form>
         </>
@@ -66,14 +66,64 @@ const stepMap = {
       )
     },
     previousStep: 'emailForm',
+    nextStep: 'personalInfo',
     stepName: 'emailConfirmation',
     header: 'Email Confirmation',
+  },
+  personalInfo: {
+    Component({
+      form,
+      stepState: {
+        firstName = '',
+        lastName = '',
+        phoneNumber = '',
+      } = {},
+    }) {
+      return (
+        <>
+          <Form ref={form}>
+            <Form.Item
+              name='firstName'
+              value={firstName}
+              rules={[{
+                required: true,
+                message: 'First Name required'
+              }]}>
+                <Input placeholder='First Name'/>
+              </Form.Item>
+              <Form.Item
+              name='lastName'
+              value={lastName}
+              rules={[{
+                required: true,
+                message: 'Last Name required'
+              }]}>
+                <Input placeholder='Last Name'/>
+              </Form.Item>
+              <Form.Item
+              name='phoneNumber'
+              value={phoneNumber}
+              rules={[{
+                required: true,
+                message: 'Phone number required'
+              }]}>
+                <Input placeholder='Phone Number'/>
+              </Form.Item>
+          </Form>
+        </>
+      )
+    },
+    previousStep: 'emailConfirmation',
+    stepName: 'personalInfo',
+    header: 'Personal Info',
+    nextButtonText: 'Done',
   }
 }
 
 const stepList = [
   'emailForm',
   'emailConfirmation',
+  'personalInfo',
 ]
 
 FirstStory.args = {

@@ -7,7 +7,7 @@ const { Step } = Steps
 const Wizard = ({ stepMap, stepList, initialStepName, initialWizardState = {} }) => {
   const [currentStepName, setCurrentStepName] = useState(initialStepName)
   const formEl = useRef()
-  const { nextStep, previousStep, Component, componentProps, onSubmit } = stepMap[currentStepName]
+  const { nextStep, previousStep, Component, componentProps, onSubmit, nextButtonText = 'Next' } = stepMap[currentStepName]
   
   const [wizardState, setWizardState] = useState(Object.keys(stepMap).reduce((acc, currentKey) => {
     return acc[currentKey] = { ...initialWizardState[currentKey] }
@@ -29,6 +29,8 @@ const Wizard = ({ stepMap, stepList, initialStepName, initialWizardState = {} })
       } catch (error) {
         // TODO: toast popup if error
       }
+    } else if (nextStepName) {
+      setCurrentStepName(nextStepName)
     }
   }
 
@@ -48,8 +50,8 @@ const Wizard = ({ stepMap, stepList, initialStepName, initialWizardState = {} })
     <>
       <ProgressTracker />
       <Component form={formEl} stepState={wizardState[currentStepName] || {}} {...(componentProps || {})} />
-      <Button onClick={() => setCurrentStepName(previousStep)}>Previous</Button>
-      <Button onClick={handleNextStep}>Next</Button>
+      {previousStep && <Button onClick={() => setCurrentStepName(previousStep)}>Previous</Button>}
+      <Button onClick={handleNextStep}>{nextButtonText}</Button>
     </>
   )
 }
