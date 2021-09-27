@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Button, Steps } from 'antd'
+import { Button, Steps, notification } from 'antd'
 import 'antd/dist/antd.css'
 
 const { Step } = Steps
@@ -13,8 +13,6 @@ const Wizard = ({ stepMap, stepList, initialStepName, initialWizardState = {} })
     return acc[currentKey] = { ...initialWizardState[currentKey] }
   }, {}))
 
-  console.log(wizardState)
-
   const handleNextStep = async () => {
     const nextStepName = typeof nextStep === 'function'
       ? nextStep()
@@ -27,7 +25,11 @@ const Wizard = ({ stepMap, stepList, initialStepName, initialWizardState = {} })
         setWizardState(previousState => ({ ...previousState, [currentStepName]: formEl.current.getFieldsValue() }))
         setCurrentStepName(nextStepName)
       } catch (error) {
-        // TODO: toast popup if error
+        notification.info({
+          message: 'There was an error',
+          description: 'Please fix the errors in red.',
+          placement: 'topRight',
+        })
       }
     } else if (nextStepName) {
       setCurrentStepName(nextStepName)
@@ -45,7 +47,6 @@ const Wizard = ({ stepMap, stepList, initialStepName, initialWizardState = {} })
     )
   }
 
-  // TODO: add step tracker / progress bar
   return (
     <>
       <ProgressTracker />
