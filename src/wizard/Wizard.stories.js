@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Input, Form } from 'antd'
 
 import Wizard from './index';
@@ -16,37 +16,69 @@ export const FirstStory = Template.bind({});
 
 const stepMap = {
   emailForm: {
-    Component: ({ form }) => {
+    Component: ({
+      form,
+      stepState: {
+        email = '',
+        password = '',
+      } = {},
+    }) => {
       return (
-        <Fragment>
+        <>
           <Form ref={form}>
-            <Form.Item name='email'><Input/></Form.Item>
-            <Form.Item name='password'><Input/></Form.Item>
+            <Form.Item
+              name='email'
+              value={email}
+              rules={[{
+                type: 'email',
+                required: true,
+                message: 'Please enter a valid email.',
+              }]}
+            >
+              <Input/>
+            </Form.Item>
+            <Form.Item
+              name='password'
+              value={password}
+              rules={[{
+                required: true,
+                message: 'Must enter a password',
+              }]}
+            >
+              <Input type='password'/>
+            </Form.Item>
           </Form>
-        </Fragment>
+        </>
       )
     },
     nextStep: 'emailConfirmation',
     stepName: 'emailForm',
-    onSubmit({ form, setWizardState, stepName, ...props }) {
-      setWizardState(previousState => ({ ...previousState, [stepName]: form.current.getFieldsValue() }))
-    }
+    onSubmit({ form, ...props }) {
+    },
+    header: 'Account Info',
   },
   emailConfirmation: {
     Component() {
       return (
-        <Fragment>
+        <>
           Confirmed!
-        </Fragment>
+        </>
       )
     },
-    nextStep: 'emailForm',
+    previousStep: 'emailForm',
     stepName: 'emailConfirmation',
+    header: 'Email Confirmation',
   }
 }
+
+const stepList = [
+  'emailForm',
+  'emailConfirmation',
+]
 
 FirstStory.args = {
   /*👇 The args you need here will depend on your component */
   stepMap,
+  stepList,
   initialStepName: 'emailForm',
 };

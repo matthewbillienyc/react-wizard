@@ -1,37 +1,56 @@
-import React, { Fragment, useState, useRef } from 'react'
-import { Button } from 'antd'
+import React, { useState, useRef } from 'react'
+import { Button, Steps } from 'antd'
+import 'antd/dist/antd.css'
 
-const Wizard = ({ stepMap, initialStepName }) => {
+const { Step } = Steps
+
+const Wizard = ({ stepMap, stepList, initialStepName, initialWizardState = {} }) => {
   const [currentStepName, setCurrentStepName] = useState(initialStepName)
   const formEl = useRef()
   const { nextStep, previousStep, Component, componentProps, onSubmit } = stepMap[currentStepName]
   
   const [wizardState, setWizardState] = useState(Object.keys(stepMap).reduce((acc, currentKey) => {
-    return acc[currentKey] = {}
+    return acc[currentKey] = { ...initialWizardState[currentKey] }
   }, {}))
 
   console.log(wizardState)
 
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
     const nextStepName = typeof nextStep === 'function'
       ? nextStep()
       : nextStep
 
     if (onSubmit) {
-      // TODO: validate form / errors / disabled next
-      // Call step submit
-      onSubmit({ form: formEl, setWizardState, stepName: currentStepName })
+      try {
+        await formEl.current.validateFields()
+        onSubmit({ form: formEl, setWizardState, stepName: currentStepName })
+        setWizardState(previousState => ({ ...previousState, [currentStepName]: formEl.current.getFieldsValue() }))
+        setCurrentStepName(nextStepName)
+      } catch (error) {
+        // TODO: toast popup if error
+      }
     }
-    setCurrentStepName(nextStepName)
+  }
+
+  const ProgressTracker = () => {
+    const currentStep = stepList.indexOf(stepList.find(name => name === currentStepName))
+    return (
+      <>
+        <Steps current={currentStep}>
+          {stepList.map(name => <Step key={name} title={stepMap[name].header} />)}
+        </Steps>
+      </>
+    )
   }
 
   // TODO: add step tracker / progress bar
   return (
-    <Fragment>
-      <Component form={formEl} {...(componentProps || {})} />
+    <>
+      <ProgressTracker />
+      <Component form={formEl} stepState={wizardState[currentStepName] || {}} {...(componentProps || {})} />
       <Button onClick={() => setCurrentStepName(previousStep)}>Previous</Button>
       <Button onClick={handleNextStep}>Next</Button>
-    </Fragment>
+    </>
   )
 }
 
