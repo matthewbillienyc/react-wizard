@@ -22,13 +22,13 @@ const Wizard = ({ stepMap, sectionMap, initialStepName, initialWizardState = {} 
 
   const handleNextStep = async () => {
     const nextStepName = typeof nextStep === 'function'
-      ? nextStep()
+      ? nextStep({ form: formEl, wizardState, currentStepName })
       : nextStep
 
     if (onSubmit && formEl.current) {
       try {
         await formEl.current.validateFields()
-        onSubmit({ form: formEl, setWizardState, stepName: currentStepName })
+        onSubmit({ form: formEl, wizardState, stepName: currentStepName })
         setWizardState(previousState => ({ ...previousState, [currentStepName]: formEl.current.getFieldsValue() }))
         setCurrentStepName(nextStepName)
       } catch (error) {
@@ -45,7 +45,7 @@ const Wizard = ({ stepMap, sectionMap, initialStepName, initialWizardState = {} 
 
   const handlePreviousStep = () => {
     const previousStepName = typeof previousStep === 'function'
-      ? previousStep()
+      ? previousStep({ form: formEl, wizardState, currentStepName })
       : previousStep
 
     setCurrentStepName(previousStepName)
@@ -64,8 +64,8 @@ const Wizard = ({ stepMap, sectionMap, initialStepName, initialWizardState = {} 
 
   return (
     <>
-      <ProgressTracker />
-      <Component form={formEl} stepState={wizardState[currentStepName] || {}} {...componentProps} />
+      <ProgressTracker/>
+      <Component form={formEl} stepState={wizardState[currentStepName] || {}} {...componentProps}/>
       {previousStep && <Button onClick={handlePreviousStep}>Previous</Button>}
       <Button onClick={handleNextStep}>{nextButtonText}</Button>
     </>
