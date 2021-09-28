@@ -118,8 +118,7 @@ const stepMap = {
 }
 
 const sectionMap = [
-  { header: 'Account Info', steps: ['emailForm'] },
-  { header: 'Confirmation', steps: ['emailConfirmation'] },
+  { header: 'Account Info', steps: ['emailForm', 'emailConfirmation'] },
   { header: 'Personal Info', steps: ['personalInfo'] },
 ]
 
