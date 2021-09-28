@@ -4,7 +4,7 @@ import 'antd/dist/antd.css'
 
 const { Step } = Steps
 
-const Wizard = ({ stepMap, stepList, initialStepName, initialWizardState = {} }) => {
+const Wizard = ({ stepMap, sectionMap, initialStepName, initialWizardState = {} }) => {
   const [currentStepName, setCurrentStepName] = useState(initialStepName)
   const formEl = useRef()
   const { nextStep, previousStep, Component, componentProps, onSubmit, nextButtonText = 'Next' } = stepMap[currentStepName]
@@ -37,11 +37,11 @@ const Wizard = ({ stepMap, stepList, initialStepName, initialWizardState = {} })
   }
 
   const ProgressTracker = () => {
-    const currentStep = stepList.indexOf(stepList.find(name => name === currentStepName))
+    const currentStep = sectionMap.indexOf(sectionMap.find(({ steps }) => steps.includes(currentStepName)))
     return (
       <>
         <Steps current={currentStep}>
-          {stepList.map(name => <Step key={name} title={stepMap[name].header} />)}
+          {sectionMap.map(({ header }) => <Step key={header} title={header} />)}
         </Steps>
       </>
     )

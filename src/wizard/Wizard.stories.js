@@ -55,7 +55,6 @@ const stepMap = {
     stepName: 'emailForm',
     onSubmit({ form, ...props }) {
     },
-    header: 'Account Info',
   },
   emailConfirmation: {
     Component() {
@@ -68,7 +67,6 @@ const stepMap = {
     previousStep: 'emailForm',
     nextStep: 'personalInfo',
     stepName: 'emailConfirmation',
-    header: 'Email Confirmation',
   },
   personalInfo: {
     Component({
@@ -115,20 +113,19 @@ const stepMap = {
     },
     previousStep: 'emailConfirmation',
     stepName: 'personalInfo',
-    header: 'Personal Info',
     nextButtonText: 'Done',
   }
 }
 
-const stepList = [
-  'emailForm',
-  'emailConfirmation',
-  'personalInfo',
+const sectionMap = [
+  { header: 'Account Info', steps: ['emailForm'] },
+  { header: 'Confirmation', steps: ['emailConfirmation'] },
+  { header: 'Personal Info', steps: ['personalInfo'] },
 ]
 
 FirstStory.args = {
   /*👇 The args you need here will depend on your component */
   stepMap,
-  stepList,
+  sectionMap,
   initialStepName: 'emailForm',
 };
