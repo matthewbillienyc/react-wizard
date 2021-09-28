@@ -7,8 +7,15 @@ const { Step } = Steps
 const Wizard = ({ stepMap, sectionMap, initialStepName, initialWizardState = {} }) => {
   const [currentStepName, setCurrentStepName] = useState(initialStepName)
   const formEl = useRef()
-  const { nextStep, previousStep, Component, componentProps = {}, onSubmit, nextButtonText = 'Next' } = stepMap[currentStepName]
-  
+  const {
+    nextStep,
+    previousStep,
+    Component,
+    componentProps = {},
+    onSubmit,
+    nextButtonText = 'Next'
+  } = stepMap[currentStepName]
+
   const [wizardState, setWizardState] = useState(Object.keys(stepMap).reduce((acc, currentKey) => {
     return acc[currentKey] = { ...initialWizardState[currentKey] }
   }, {}))
